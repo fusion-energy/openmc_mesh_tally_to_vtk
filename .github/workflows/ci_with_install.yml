@@ -1,0 +1,48 @@
+# This CI will lauch a Docker image that contains all the dependencies required
+# within that image the pytest test suite is run 
+
+name: CI with install
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '.gitignore'
+      - '*.md'
+      - 'CITATION.cff'
+      - 'LICENSE.txt'
+      - 'readthedocs.yml'
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    container:
+      # image: openmc/openmc:latest-dagmc is missing the dagmc universe
+      image: openmc/openmc:develop-dagmc
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: install package
+        run: |
+          python setup.py install
+
+      - name: install packages for tests
+        run: |
+          pip install -r requirements-test.txt 
+
+      - name: Run test_utils
+        run: |
+          cp tests/example.stl .
+          pytest tests/ -v --cov=openmc_mesh_tally_to_vtk --cov-append --cov-report term --cov-report xml
+
+      - name: Upload to codecov
+        uses: codecov/codecov-action@v2
+
+      - name: Run examples
+        run: |
+          cd examples
+          python create_statepoint_file_for_testing.py --batches 2 --particles 100
