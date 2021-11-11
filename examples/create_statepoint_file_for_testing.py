@@ -35,9 +35,7 @@ iron.add_element("Pb", 0.95, percent_type="wo")
 materials = openmc.Materials([breeder_material, iron])
 
 odd.just_in_time_library_generator(
-    libraries="TENDL-2019",
-    materials=materials,
-    overwrite=False
+    libraries="TENDL-2019", materials=materials, overwrite=False
 )
 
 # GEOMETRY
