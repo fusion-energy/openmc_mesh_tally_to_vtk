@@ -40,8 +40,8 @@ def _write_vtk(
     zs,
     tally_data,
     filename: str,
-    label: str = 'made with openmc_mesh_tally_to_vtk',
-    error_data= None,
+    label: str = "made with openmc_mesh_tally_to_vtk",
+    error_data=None,
 ):
 
     vtk_box = vtk.vtkRectilinearGrid()
@@ -66,8 +66,8 @@ def _write_vtk(
     tally = np.array(tally_data)
     tally_data = vtk.vtkDoubleArray()
     tally_data.SetName(label)
-    print('tally.size', tally.size)
-    print('tally', tally)
+    print("tally.size", tally.size)
+    print("tally", tally)
     tally_data.SetArray(tally, tally.size, True)
 
     if error_data is not None:
@@ -75,7 +75,6 @@ def _write_vtk(
         error_data = vtk.vtkDoubleArray()
         error_data.SetName("error_tag")
         error_data.SetArray(error, error.size, True)
-
 
     vtk_box.GetCellData().AddArray(tally_data)
     if error_data is not None:

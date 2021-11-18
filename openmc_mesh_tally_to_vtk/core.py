@@ -48,6 +48,7 @@ def write_mesh_tally_to_vtk(
         tally_data=tally_data,
         error_data=error_data,
         filename=filename,
-        label=tally.name)
+        label=tally.name,
+    )
 
     return output_filename
