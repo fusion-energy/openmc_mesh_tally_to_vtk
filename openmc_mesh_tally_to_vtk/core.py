@@ -6,8 +6,9 @@ import openmc_tally_unit_converter as otuc
 
 
 # def write_effective_dose_tally_to_vtk(
-    #todo add specific converters for dose and dpa
+# todo add specific converters for dose and dpa
 # ):
+
 
 def get_mesh_from_tally(tally):
 
@@ -17,10 +18,10 @@ def get_mesh_from_tally(tally):
         msg = "Tally does not contain a MeshFilter"
         raise ValueError(msg)
 
-    
     mesh = mesh_filter.mesh
 
     return mesh
+
 
 def replace_nans_with_zeros(list_of_numbers):
 
@@ -28,6 +29,7 @@ def replace_nans_with_zeros(list_of_numbers):
         if math.isnan(i):
             list_of_numbers[counter] = 0.0
     return list_of_numbers
+
 
 def write_mesh_tally_to_vtk(
     tally,
@@ -41,9 +43,7 @@ def write_mesh_tally_to_vtk(
         error_data = tally.std_dev[:, 0, 0]
     else:
         tally_data = otuc.process_tally(
-            tally,
-            required_units=required_units,
-            source_strength=source_strength
+            tally, required_units=required_units, source_strength=source_strength
         )
 
     tally_data = tally_data.tolist()
@@ -53,14 +53,10 @@ def write_mesh_tally_to_vtk(
     tally_data = replace_nans_with_zeros(tally_data)
     error_data = replace_nans_with_zeros(error_data)
 
-    write_vtk(    mesh,
-        tally_data,
-        error_data,
-        filename,
-        tally.name)
-    
+    write_vtk(mesh, tally_data, error_data, filename, tally.name)
+
     return filename
-    
+
 
 def write_vtk(
     mesh,
