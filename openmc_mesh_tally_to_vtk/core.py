@@ -2,12 +2,15 @@ import numpy as np
 import vtk
 import math
 import openmc
+import openmc_tally_unit_converter as otuc
 
 
-def write_mesh_tally_to_vtk(
-    tally,
-    filename: str = "vtk_file_from_openmc_mesh.vtk",
-):
+# def write_effective_dose_tally_to_vtk(
+# todo add specific converters for dose and dpa
+# ):
+
+
+def get_mesh_from_tally(tally):
 
     if tally.contains_filter(openmc.MeshFilter):
         mesh_filter = tally.find_filter(filter_type=openmc.MeshFilter)
@@ -15,26 +18,57 @@ def write_mesh_tally_to_vtk(
         msg = "Tally does not contain a MeshFilter"
         raise ValueError(msg)
 
-    tally_label = tally.name
     mesh = mesh_filter.mesh
 
-    xs = np.linspace(mesh.lower_left[0], mesh.upper_right[0], mesh.dimension[0] + 1)
-    ys = np.linspace(mesh.lower_left[1], mesh.upper_right[1], mesh.dimension[1] + 1)
-    zs = np.linspace(mesh.lower_left[2], mesh.upper_right[2], mesh.dimension[2] + 1)
-    # tally = statepoint.get_tally(name=tally.name)
+    return mesh
 
-    print(tally.mean)
 
-    tally_data = tally.mean[:, 0, 0]
-    error_data = tally.std_dev[:, 0, 0]
+def replace_nans_with_zeros(list_of_numbers):
+
+    for counter, i in enumerate(list_of_numbers):
+        if math.isnan(i):
+            list_of_numbers[counter] = 0.0
+    return list_of_numbers
+
+
+def write_mesh_tally_to_vtk(
+    tally,
+    filename: str = "vtk_file_from_openmc_mesh.vtk",
+    required_units: str = None,
+    source_strength: float = None,
+):
+
+    if required_units is None:
+        tally_data = tally.mean[:, 0, 0]
+        error_data = tally.std_dev[:, 0, 0]
+    else:
+        tally_data = otuc.process_tally(
+            tally, required_units=required_units, source_strength=source_strength
+        )
 
     tally_data = tally_data.tolist()
     error_data = error_data.tolist()
 
-    for content in [tally_data, error_data]:
-        for counter, i in enumerate(content):
-            if math.isnan(i):
-                content[counter] = 0.0
+    mesh = get_mesh_from_tally(tally)
+    tally_data = replace_nans_with_zeros(tally_data)
+    error_data = replace_nans_with_zeros(error_data)
+
+    write_vtk(mesh, tally_data, error_data, filename, tally.name)
+
+    return filename
+
+
+def write_vtk(
+    mesh,
+    tally_data,
+    error_data,
+    filename: str,
+    label: str,
+):
+
+    xs = np.linspace(mesh.lower_left[0], mesh.upper_right[0], mesh.dimension[0] + 1)
+    ys = np.linspace(mesh.lower_left[1], mesh.upper_right[1], mesh.dimension[1] + 1)
+    zs = np.linspace(mesh.lower_left[2], mesh.upper_right[2], mesh.dimension[2] + 1)
 
     vtk_box = vtk.vtkRectilinearGrid()
 
@@ -57,7 +91,7 @@ def write_mesh_tally_to_vtk(
 
     tally = np.array(tally_data)
     tally_data = vtk.vtkDoubleArray()
-    tally_data.SetName(tally_label)
+    tally_data.SetName(label)  # TODO allow user specified labels
     tally_data.SetArray(tally, tally.size, True)
 
     error = np.array(error_data)
