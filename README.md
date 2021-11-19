@@ -29,3 +29,7 @@ write_mesh_tally_to_vtk(
     filename = "vtk_file_from_openmc_mesh.vtk",
 )
 ```
+
+# Acknowledge
+
+Based on a (GitHub Gist by)[https://gist.github.com/pshriwise/da30da3daf08594dddf1a58b9f10dcc8] Patrick Shriwise
