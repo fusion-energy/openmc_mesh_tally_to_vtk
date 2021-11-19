@@ -32,4 +32,4 @@ write_mesh_tally_to_vtk(
 
 # Acknowledge
 
-Based on a (GitHub Gist by)[https://gist.github.com/pshriwise/da30da3daf08594dddf1a58b9f10dcc8] Patrick Shriwise
+This package is based on a [GitHub Gist by](https://gist.github.com/pshriwise/da30da3daf08594dddf1a58b9f10dcc8) by Patrick Shriwise

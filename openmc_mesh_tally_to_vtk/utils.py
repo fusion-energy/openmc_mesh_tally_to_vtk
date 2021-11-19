@@ -4,7 +4,14 @@ import math
 import openmc
 
 
-def _get_mesh_from_tally(tally):
+def _get_mesh_from_tally(tally: openmc.Tally):
+    """Extracts the mesh from a tally
+
+    Args: the tally to extract the mesh from. Should have a MeshFilter as one
+        of the filters.
+
+    Returns: an openmc.RegularMesh object
+    """
 
     if tally.contains_filter(openmc.MeshFilter):
         mesh_filter = tally.find_filter(filter_type=openmc.MeshFilter)
@@ -17,7 +24,13 @@ def _get_mesh_from_tally(tally):
     return mesh
 
 
-def _replace_nans_with_zeros(list_of_numbers):
+def _replace_nans_with_zeros(list_of_numbers: list):
+    """Replaces any NaN present in a list with 0.
+
+    Args: a list of floats and which optionally contains NaNs
+
+    Returns: a list of floats
+    """
 
     for counter, i in enumerate(list_of_numbers):
         if math.isnan(i):
@@ -25,7 +38,13 @@ def _replace_nans_with_zeros(list_of_numbers):
     return list_of_numbers
 
 
-def _find_coords_of_mesh(mesh):
+def _find_coords_of_mesh(mesh: openmc.RegularMesh):
+    """Finds x, y, z coordinates of the voxels in a openmc.RegularMesh object.
+
+    Args: the openmc.RegularMesh to find coordinates of.
+
+    Returns: A tuple of three numpy.linspace arrays for x, y, z values
+    """
 
     xs = np.linspace(mesh.lower_left[0], mesh.upper_right[0], mesh.dimension[0] + 1)
     ys = np.linspace(mesh.lower_left[1], mesh.upper_right[1], mesh.dimension[1] + 1)
