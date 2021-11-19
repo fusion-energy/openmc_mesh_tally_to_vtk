@@ -8,13 +8,8 @@ on:
     branches:
       - develop
       - main
-    paths-ignore:
-      - 'docs/**'
-      - '.gitignore'
-      - '*.md'
-      - 'CITATION.cff'
-      - 'LICENSE.txt'
-      - 'readthedocs.yml'
+    paths:
+      - '**.py'
 
 jobs:
   testing:
@@ -36,13 +31,15 @@ jobs:
 
       - name: Run test_utils
         run: |
-          cp tests/example.stl .
+          python tests/create_statepoint_file_with_meshes_openmc.py --batches 2 --particles 100
+          python tests/create_statepoint_file_with_meshes_openmc.py --batches 1 --particles 100
           pytest tests/ -v --cov=openmc_mesh_tally_to_vtk --cov-append --cov-report term --cov-report xml
 
       - name: Upload to codecov
         uses: codecov/codecov-action@v2
 
-      - name: Run examples
-        run: |
-          cd examples
-          python create_statepoint_file_for_testing.py --batches 2 --particles 100
+      # todo add examples
+      # - name: Run examples
+      #   run: |
+      #     cd examples
+      #     python create_statepoint_file_for_testing.py --batches 2 --particles 100
