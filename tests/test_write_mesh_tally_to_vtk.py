@@ -7,15 +7,19 @@ from openmc_mesh_tally_to_vtk import write_mesh_tally_to_vtk
 import meshio
 import unittest
 
-class TestWriteMeshTallyToVtk(unittest.TestCase):
 
+class TestWriteMeshTallyToVtk(unittest.TestCase):
     def setUp(self):
 
         statepoint = openmc.StatePoint("statepoint.1.h5")
-        self.my_tally_1_batches = statepoint.get_tally(name="neutron_effective_dose_on_3D_mesh")
+        self.my_tally_1_batches = statepoint.get_tally(
+            name="neutron_effective_dose_on_3D_mesh"
+        )
 
         statepoint = openmc.StatePoint("statepoint.2.h5")
-        self.my_tally_2_batches = statepoint.get_tally(name="neutron_effective_dose_on_3D_mesh")
+        self.my_tally_2_batches = statepoint.get_tally(
+            name="neutron_effective_dose_on_3D_mesh"
+        )
 
     def test_written_file_exists_2_batches(self):
 
@@ -45,7 +49,8 @@ class TestWriteMeshTallyToVtk(unittest.TestCase):
 
         # converts the tally result into a VTK file
         write_mesh_tally_to_vtk(
-            tally=self.my_tally_2_batches, filename="vtk_file_from_openmc_mesh_2_batches.vtk"
+            tally=self.my_tally_2_batches,
+            filename="vtk_file_from_openmc_mesh_2_batches.vtk",
         )
 
         mesh = meshio.read("vtk_file_from_openmc_mesh_2_batches.vtk")
@@ -65,7 +70,8 @@ class TestWriteMeshTallyToVtk(unittest.TestCase):
 
         # converts the tally result into a VTK file
         write_mesh_tally_to_vtk(
-            tally=self.my_tally_1_batches, filename="vtk_file_from_openmc_mesh_1_batches.vtk"
+            tally=self.my_tally_1_batches,
+            filename="vtk_file_from_openmc_mesh_1_batches.vtk",
         )
 
         mesh = meshio.read("vtk_file_from_openmc_mesh_1_batches.vtk")
@@ -82,7 +88,9 @@ class TestWriteMeshTallyToVtk(unittest.TestCase):
 
         # converts the tally result into a VTK file
         write_mesh_tally_to_vtk(
-            tally=self.my_tally_2_batches, filename="vtk_file_from_openmc_mesh_2_batches.vtk", include_std_dev=False
+            tally=self.my_tally_2_batches,
+            filename="vtk_file_from_openmc_mesh_2_batches.vtk",
+            include_std_dev=False,
         )
 
         mesh = meshio.read("vtk_file_from_openmc_mesh_2_batches.vtk")

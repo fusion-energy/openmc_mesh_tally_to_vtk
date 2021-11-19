@@ -10,9 +10,8 @@ import os
 
 
 class TestUtils:
-
     def test_get_mesh_from_tally(self):
-        """checks that a openmc.RegularMesh object is returned by the 
+        """checks that a openmc.RegularMesh object is returned by the
         get_mesh_from_tally function"""
 
         sp_2_batches = openmc.StatePoint("statepoint.2.h5")
@@ -51,7 +50,7 @@ class TestUtils:
         """Checks that the values in the resulting VTK file are the same as
         the input data and checks error tag does not exist in the vtk file"""
 
-        os.system('rm test_write_vtk')
+        os.system("rm test_write_vtk")
 
         xs = np.linspace(0, 10, 3)
         ys = np.linspace(0, 10, 3)
@@ -83,7 +82,7 @@ class TestUtils:
         the input data and error and checks that both data and error tags
         exist in the vtk file"""
 
-        os.system('rm test_write_vtk')
+        os.system("rm test_write_vtk")
 
         xs = np.linspace(0, 10, 3)
         ys = np.linspace(0, 10, 3)
