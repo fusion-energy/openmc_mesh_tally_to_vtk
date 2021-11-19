@@ -22,7 +22,7 @@ def write_mesh_tally_to_vtk(
     filename: str = "vtk_file_from_openmc_mesh.vtk",
     required_units: str = None,
     source_strength: float = None,
-    include_std_dev: bool = True
+    include_std_dev: bool = True,
 ):
     """Writes a regular mesh tally to a VTK file. If required units are specified
     then the openmc_tally_unit_converter package will attempt to convert the tally
@@ -52,12 +52,12 @@ def write_mesh_tally_to_vtk(
             # if std_dev is all nan values then batches was 1 and there is no need
             # to add this to the vtk
             if np.isnan(error_data).all():
-                error_data=None
+                error_data = None
             else:
                 error_data = error_data.tolist()
                 error_data = _replace_nans_with_zeros(error_data)
         else:
-            error_data=None
+            error_data = None
     else:
         tally_data, error_data = otuc.process_tally(
             tally, required_units=required_units, source_strength=source_strength

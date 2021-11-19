@@ -6,10 +6,10 @@ import openmc
 
 def _get_mesh_from_tally(tally: openmc.Tally):
     """Extracts the mesh from a tally
-    
+
     Args: the tally to extract the mesh from. Should have a MeshFilter as one
         of the filters.
-    
+
     Returns: an openmc.RegularMesh object
     """
 
@@ -26,9 +26,9 @@ def _get_mesh_from_tally(tally: openmc.Tally):
 
 def _replace_nans_with_zeros(list_of_numbers: list):
     """Replaces any NaN present in a list with 0.
-    
+
     Args: a list of floats and which optionally contains NaNs
-    
+
     Returns: a list of floats
     """
 
