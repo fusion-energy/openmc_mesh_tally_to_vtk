@@ -11,7 +11,7 @@ pip install openmc-mesh-tally-to-vtk
 
 The package can be used in conjunction with OpenMC to produce a VTK file of a ```openmc.RegularMesh``` tally.
 
-The simplest example is to read in an OpenMC tally and write it out as a VTK file.
+The simplest example is to read in an OpenMC tally and write it out as a VTK file which can then be opened with programs like [Paraview](https://www.paraview.org).
 
 ```python
 from openmc_mesh_tally_to_vtk import write_mesh_tally_to_vtk
