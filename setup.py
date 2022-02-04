@@ -40,6 +40,6 @@ setuptools.setup(
         "scipy",
         "dagmc_geometry_slice_plotter",
         "openmc_tally_unit_converter",
-        "vtk"
+        "vtk",
     ],
 )
