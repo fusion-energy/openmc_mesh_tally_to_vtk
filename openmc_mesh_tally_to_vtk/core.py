@@ -45,6 +45,8 @@ def write_mesh_tally_to_vtk(
 
     if required_units is None:
         tally_data = tally.mean[:, 0, 0]
+        tally_data = tally_data.tolist()
+        tally_data = _replace_nans_with_zeros(tally_data)
         if include_std_dev:
             error_data = tally.std_dev[:, 0, 0]
             # if std_dev is all nan values then batches was 1 and there is no need
@@ -57,15 +59,11 @@ def write_mesh_tally_to_vtk(
         else:
             error_data = None
     else:
-        tally_data = otuc.process_tally(
+        tally_data, error_data = otuc.process_tally(
             tally, required_units=required_units, source_strength=source_strength
         )
 
     mesh = _get_mesh_from_tally(tally)
-
-    tally_data = tally_data.tolist()
-
-    tally_data = _replace_nans_with_zeros(tally_data)
 
     xs, ys, zs = _find_coords_of_mesh(mesh)
 

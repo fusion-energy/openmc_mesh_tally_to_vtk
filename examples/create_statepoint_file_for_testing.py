@@ -34,14 +34,12 @@ iron.add_element("Pb", 0.95, percent_type="wo")
 
 materials = openmc.Materials([breeder_material, iron])
 
-odd.just_in_time_library_generator(
-    libraries="TENDL-2019", materials=materials, overwrite=False
-)
+odd.just_in_time_library_generator(libraries="TENDL-2019", materials=materials)
 
 # GEOMETRY
 
 # surfaces
-vessel_inner = openmc.Sphere(r=500)
+vessel_inner = openmc.Sphere(r=5)
 first_wall_outer_surface = openmc.Sphere(r=510)
 breeder_blanket_outer_surface = openmc.Sphere(r=610, boundary_type="vacuum")
 
@@ -63,42 +61,39 @@ universe = openmc.Universe(
 )
 geometry = openmc.Geometry(universe)
 
+tally1 = odw.MeshTally2D(
+    tally_type="neutron_effective_dose",
+    plane="xy",
+    mesh_resolution=(10, 5),
+    bounding_box=[(-100, -100, 0), (100, 100, 1)],
+)
 
-# tally1 = odw.MeshTally2D(
-#     tally_type="neutron_effective_dose",
-#     plane="xy",
-#     mesh_resolution=(10, 5),
-#     bounding_box=[(-100, -100, 0), (100, 100, 1)],
-# )
+tally2 = odw.MeshTally3D(
+    mesh_resolution=(2, 2, 2),
+    bounding_box=[(-100, -100, -100), (100, 100, 100)],
+    tally_type="neutron_effective_dose",
+)
 
-# tally2 = odw.MeshTally3D(
-#     mesh_resolution=(6, 6, 6),
-#     bounding_box=[(-100, -100, 0), (100, 100, 1)],
-#     tally_type="neutron_effective_dose",
-# )
-
-# tally3 = odw.MeshTally2D(
-#     tally_type="heating",
-#     plane="xy",
-#     mesh_resolution=(10, 5),
-#     bounding_box=[(-100, -100, 0), (100, 100, 1)],
-# )
-
+tally3 = odw.MeshTally2D(
+    tally_type="neutron_flux",
+    plane="xy",
+    mesh_resolution=(10, 5),
+    bounding_box=[(-100, -100, 0), (100, 100, 1)],
+)
 tally4 = odw.MeshTally3D(
-    mesh_resolution=(5, 6, 7),
-    bounding_box=[(-1000, -1000, -1000), (1000, 1000, 1000)],
+    mesh_resolution=(2, 2, 2),
+    bounding_box=[(-100, -100, -100), (100, 100, 100)],
     tally_type="heating",
 )
 
 tallies = openmc.Tallies(
     [
-        # tally1,
-        # tally2,
-        # tally3,
+        tally1,
+        tally2,
+        tally3,
         tally4,
     ]
 )
-
 
 settings = odw.FusionSettings()
 settings.batches = args.batches
