@@ -1,3 +1,5 @@
+# This package is now unnecessary as all openmc meshes natively support exporting to VTK
+
 
 Convert an OpenMC mesh tally to a VTK file with optional unit conversion
 
